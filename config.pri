@@ -40,6 +40,7 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/720x1280/DeviceWidthAndHeightSelector.qml) \
         $$quote($$BASEDIR/assets/720x720/DeviceWidthAndHeightSelector.qml) \
         $$quote($$BASEDIR/assets/768x1280/DeviceWidthAndHeightSelector.qml) \
+        $$quote($$BASEDIR/assets/DeviceWidthAndHeightSelector.qml) \
         $$quote($$BASEDIR/assets/FlyImage.qml) \
         $$quote($$BASEDIR/assets/images/fly_body.png) \
         $$quote($$BASEDIR/assets/images/fly_wings.png) \

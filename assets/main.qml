@@ -1,20 +1,5 @@
-/*
- * Copyright (c) 2011-2014 BlackBerry Limited.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-import bb.cascades 1.2
+// main.qml
+import bb.cascades 1.0
 
 Page {
     id: mainPage
@@ -22,45 +7,28 @@ Page {
     property int deviceWidth
     property int deviceHeight
     property int speed: 3000
-    property bool animationRunning: false
-
-    onAnimationRunningChanged: {
-        if (!animationRunning) {
-            startNewAnimation()
-        }
-    }
     
-    function startNewAnimation() {
-        thisTranslation.toX = Math.random() * deviceWidth
-        thisTranslation.toY = Math.random() * deviceHeight
-        
-        thisScale.toX = (Math.random() * 1.5) + 0.5
-        thisScale.toY = thisScale.toX
-        
+    onCreationCompleted: {
+        // Starts the animation when the app launch
         thisAnimation.play()
     }
     
-    onCreationCompleted: {
-        startNewAnimation()
-    }
-    
-    Container {
+    content: Container {
         layout: DockLayout {}
         background: Color.LightGray
         horizontalAlignment: HorizontalAlignment.Fill
         verticalAlignment: VerticalAlignment.Fill
         
-        DeviceWidthAndHeightSelector {
-            // This is used to get screen width and height on app startup
-            // It uses Cascades' asset selector
-        }
+        // This is used to get screen size using asset selector
+        DeviceWidthAndHeightSelector {}
         
         FlyImage {
             id: flyImageAlive
-
+            
             maxHeight: 100
             maxWidth: maxHeight
-                        
+            
+            // Starts at the bottom of the screen                        
             translationX: Math.random() * deviceWidth 
             translationY: deviceHeight + 100
             
@@ -68,18 +36,36 @@ Page {
                 ParallelAnimation {
                     id: thisAnimation
                     
-                    onStarted: animationRunning = true
-                    onEnded: animationRunning = false
+                    onEnded: {
+                        // This is what happens when one animation cycle is done
+                        
+                        // Recalculate new translation points
+                        thisTranslation.toX = Math.random() * deviceWidth
+                        thisTranslation.toY = Math.random() * deviceHeight
+                        
+                        // Recalculate new scale transition value
+                        thisScale.toX = (Math.random() * 1.5) + 0.5
+                        thisScale.toY = thisScale.toX
+                        
+                        // Restart the animation with the new values
+                        thisAnimation.play()
+                    }
                     
                     TranslateTransition {
+                        // Move the fly toX and toY values
                         id: thisTranslation
                         duration: speed
                         easingCurve: StockCurve.Linear
+                        toX: Math.random() * deviceWidth
+                        toY: Math.random() * deviceHeight
                     }
                     
                     ScaleTransition {
+                        // Rescale the fly randomly
                         id: thisScale
                         duration: speed
+                        toX: (Math.random() * 1.5) + 0.5
+                        toY: toX
                     }
                 }
             ]
